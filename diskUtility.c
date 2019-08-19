@@ -231,6 +231,8 @@ int writeFileToDisk(FILE *fp, int blockNum, int type)
         while (line_count < BLOCK_SIZE)
         {
             fgets(temp, 100, fp);
+            if(temp[0] == ';')
+                continue;
 
             if (feof(fp))
             {

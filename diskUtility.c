@@ -231,8 +231,23 @@ int writeFileToDisk(FILE *fp, int blockNum, int type)
         while (line_count < BLOCK_SIZE)
         {
             fgets(temp, 100, fp);
+
+            /* skip lines starting with ; as comments */
             if(temp[0] == ';')
                 continue;
+
+            /* skip parts after a semicolon in a line,
+             * if it is not inside quotes */
+            int in_quotes = false;
+            for(int i = 0; temp[i]!='\0'; i++) {
+                if(temp[i]=='"')
+                    in_quotes = !in_quotes;
+                else if(temp[i]==';' && !in_quotes)
+                {
+                    temp[i] = '\0';
+                    break;
+                }
+            }
 
             if (feof(fp))
             {
